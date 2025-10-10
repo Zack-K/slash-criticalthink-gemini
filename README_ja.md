@@ -13,62 +13,96 @@
 - コーディングエージェント（Claude Code / Codex CLI 等）を日常的に使う開発者
 - AI の提案を鵜呑みにせず、批判的に検証したい技術者
 
-## セットアップ
+## Gemini CLI 向けセットアップ
 
-### オプション 1: 手動インストール
+このフォークは Gemini CLI での使用を想定しています。
 
-1. 使用するツールに応じて [`criticalthink.md`](criticalthink.md) を配置:
+`/criticalthink` カスタムコマンドをインストールするには、以下の手順に従ってください。
 
-   - **Claude Code**: `.claude/commands/` (プロジェクトルートまたはホームディレクトリ)
-   - **Codex CLI**: `~/.codex/prompts/`
+### 前提条件
 
-2. ディレクトリを作成してファイルをコピー:
+*   **Git:** システムにGitがインストールされていることを確認してください。
+*   **Gemini CLI:** Gemini CLIがインストールされていることを確認してください。
 
-   Claude Code の場合:
+### インストール手順
 
-   ```bash
-   mkdir -p .claude/commands
-   cp criticalthink.md .claude/commands/
-   ```
+#### 1. リポジトリをクローンする
 
-   Codex CLI の場合:
+まず、このプロジェクトのGitHubリポジトリをローカルマシンにクローンします。
+**セキュリティに関する注意:** クローンするリポジトリは、悪意のあるコードが含まれている可能性があるため、常に信頼できるソースからのものであることを確認してください。
 
-   ```bash
-   mkdir -p ~/.codex/prompts
-   cp criticalthink.md ~/.codex/prompts/
-   ```
+```bash
+git clone https://github.com/shimazakikeiichi/slash-criticalthink-gemini.git
+cd slash-criticalthink-gemini
+```
 
-3. ツールを再起動（または新しい会話を開始）
+#### 2. インストール方法を選択する
 
-4. 動作確認:
-   ```
-   User: 2 + 2 は？
-   AI: 4
-   User: /criticalthink
-   ```
-   批判的分析が開始されれば成功
+カスタムコマンドは、「ローカルコマンド」（このプロジェクトディレクトリ内でのみ利用可能）として、または「グローバルコマンド」（すべてのGemini CLIプロジェクトで利用可能）としてインストールできます。
 
-### オプション 2: プラグインマーケットプレース経由でインストール (Claude Code 向け)
+##### A. ローカルコマンドとしてインストール（開発向け推奨）
 
-1. このリポジトリをプラグインマーケットプレースに追加:
+この方法は、コマンドをローカルで開発・修正する場合や、コマンドをプロジェクト固有のものとして管理したい場合に推奨されます。
 
-   ```
-   /plugin marketplace add https://github.com/abagames/slash-criticalthink.git
-   ```
+1.  **プロジェクトのルートディレクトリにいることを確認します。**
+    （上記の手順1を実行していれば、すでにルートディレクトリにいます。）
 
-2. criticalthink コマンドをインストール:
+2.  **拡張機能をインストールします。**
+    プロジェクトのルートディレクトリから以下のコマンドを実行します。
+    ```bash
+    gemini extensions install .
+    ```
+    *   **`gemini extensions install .` に関する注意:** このコマンドは、カレントディレクトリにある拡張機能をインストールするように設計されていますが、その正確な内部動作や安定性はGemini CLIのバージョンによって異なる場合があります。問題が発生した場合は、以下のグローバルコマンドのインストール方法を検討してください。
 
-   ```
-   /plugin install criticalthink
-   ```
+##### B. グローバルコマンドとしてインストール
 
-3. 動作確認:
-   ```
-   User: 2 + 2 は？
-   AI: 4
-   User: /criticalthink
-   ```
-   批判的分析が開始されれば成功
+この方法は、Gemini CLIを使用するどのディレクトリからでも `/criticalthink` コマンドを利用できるようにします。
+
+1.  **`criticalthink.toml` ファイルをグローバルコマンドディレクトリにコピーします。**
+    まず、グローバルコマンドディレクトリが存在することを確認します。
+    ```bash
+bash
+mkdir -p ~/.gemini/commands/
+    ```
+    次に、ファイルをコピーします。
+    ```bash
+    cp .gemini/commands/criticalthink.toml ~/.gemini/commands/
+    ```
+    *   **Windowsユーザーへの注意:** `~/.gemini/commands/` のパスは、Unix系システム（Linux/macOS）で一般的です。Windowsでは、Gemini CLIのインストール状況によって `C:\Users\<ユーザー名>\.gemini\commands\` など、同等のパスが異なる場合があります。コピーコマンドを適宜調整してください。
+
+### 動作確認
+
+インストールが完了したら、以下の手順でコマンドが正しく動作しているかを確認してください。
+
+1.  **Gemini CLIを再起動します。**
+    （Gemini CLIがすでに実行中の場合は、一度終了してから再度起動してください。）
+
+2.  **コマンド補完を確認します。**
+    Gemini CLI内で `/criticalthink` と入力し、コマンド補完リストに表示されるか確認します。
+
+3.  **コマンドをテストします。**
+    AIの何らかの応答に続けて `/criticalthink` コマンドを実行します。
+    ```
+    User: 2 + 2 は？
+    AI: 4
+    User: /criticalthink
+    ```
+    AIが自身の応答に対する批判的分析を開始すれば、インストールは成功です。
+
+### 動作確認
+
+インストール後、AIの何らかの応答に続けて `/criticalthink` コマンドを実行することで、動作を確認できます。
+
+```
+User: 2 + 2 は？
+AI: 4
+User: /criticalthink
+```
+AIが自身の応答に対する批判的分析を開始すれば、インストールは成功です。
+
+### 他のプラットフォーム向けセットアップ (オリジナル)
+
+Claude Code や Codex CLI など、他のプラットフォームでこのツールを使用する方法については、**[オリジナルのリポジトリ](https://github.com/abagames/slash-criticalthink)** を参照してください。
 
 ## 使い方
 
