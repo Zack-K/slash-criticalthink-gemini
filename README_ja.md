@@ -61,8 +61,8 @@ cd slash-criticalthink-gemini
 1.  **`criticalthink.toml` ファイルをグローバルコマンドディレクトリにコピーします。**
     まず、グローバルコマンドディレクトリが存在することを確認します。
     ```bash
-bash
-mkdir -p ~/.gemini/commands/
+    bash
+    mkdir -p ~/.gemini/commands/
     ```
     次に、ファイルをコピーします。
     ```bash
